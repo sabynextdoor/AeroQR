@@ -1,4 +1,4 @@
-# ISRO IROUC 2026 - QR Drone Detector by saravanan
+# ISRO IROUC 2026 -  QR Drone Detector by saravanan
 
 [![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![OpenCV Version](https://img.shields.io/badge/opencv-4.5%2B-green.svg)](https://opencv.org/)
