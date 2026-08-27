@@ -1,0 +1,32 @@
+name: Publish to PyPI
+
+on:
+  workflow_dispatch:
+  release:
+    types: [released]
+
+permissions:
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish aeroqr to PyPI
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build
+        run: pip install build
+      - name: Build distributions
+        run: python -m build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+# Configuration required before this workflow is used:
+#  1. Claim the package name on PyPI (pypi.org/project/aeroqr).
+#  2. In PyPI, enable "Trusted Publishing" for the sabynextdoor/AeroQR repository.
+#  3. (Optional) Create a "pypi" GitHub environment under the repository settings.
+# The id-token permission above is what enables keyless, secret-free publishing.
