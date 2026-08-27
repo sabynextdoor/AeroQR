@@ -91,11 +91,20 @@ AeroQR solves all three problems in a single threaded pipeline:
 
 ## 🎬 Demo
 
-> Demo media lives in the [releases](https://github.com/sabynextdoor/AeroQR/releases) and
-> the [Downloads](#) section. Run `python -m aeroqr` and hold a printed QR code
-> up to your camera to see it live.
+> 🎥 **Demo video slot** — the installation / live-detection demo clip goes here.
+> Drop your clip in and link it from the [Releases](https://github.com/sabynextdoor/AeroQR/releases)
+> tab (or add `assets/demo.mp4` to the repo) and it will render inline on this page.
 
-![Ui screenshot](https://github.com/user-attachments/assets/8bd79c52-b137-47ff-a3d0-cb9b66f1c0f8)
+**Try it live:**
+
+```bash
+python -m aeroqr
+```
+
+Hold a printed QR code up to your camera — within a few seconds the system locks
+onto it, auto-calibrates the reference orientation and starts steering towards a
+perfect, dead-centre alignment. The [Releases](https://github.com/sabynextdoor/AeroQR/releases)
+tab carries the built package artifacts for every version.
 
 ## 🧠 How it works
 
