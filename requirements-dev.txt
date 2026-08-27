@@ -1,0 +1,6 @@
+-r requirements.txt
+build>=1.0
+pytest>=7.0
+qrcode[pil]>=7.4
+ruff>=0.4
+wheel

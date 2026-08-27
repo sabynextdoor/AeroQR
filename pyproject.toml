@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aeroqr"
+version = "1.0.0"
+description = "Real-time QR code detection, seed matching and orientation tracking for drone applications (ISRO IROUC 2026)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+  { name = "sabynextdoor", email = "sabynextdoor@gmail.com" },
+]
+keywords = [
+  "qr-code",
+  "qr-detection",
+  "computer-vision",
+  "opencv",
+  "drone",
+  "drone-tracking",
+  "object-tracking",
+  "isro",
+  "irouc",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Image Recognition",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "numpy>=1.21",
+  "opencv-python>=4.5",
+]
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.0",
+  "pytest>=7.0",
+  "pytest-cov>=4.0",
+  "qrcode[pil]>=7.4",
+  "ruff>=0.4",
+  "wheel",
+]
+
+[project.urls]
+Homepage = "https://github.com/sabynextdoor/AeroQR"
+Repository = "https://github.com/sabynextdoor/AeroQR"
+Issues = "https://github.com/sabynextdoor/AeroQR/issues"
+Documentation = "https://github.com/sabynextdoor/AeroQR/blob/main/README.md"
+Changelog = "https://github.com/sabynextdoor/AeroQR/blob/main/CHANGELOG.md"
+
+[project.scripts]
+aeroqr = "aeroqr.cli:main"
+
+[project.entry-points."aeroqr.commands"]
+app = "aeroqr.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["aeroqr"]
+
+[tool.ruff.format]
+quote-style = "double"
