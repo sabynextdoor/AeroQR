@@ -1,0 +1,44 @@
+AeroQR (c) 2026 sabynextdoor
+https://github.com/sabynextdoor/AeroQR
+
+This product includes software developed by the AeroQR contributors, released
+under the MIT License. See the LICENSE file for the full terms.
+
+----------------------------------------------------------------------
+THIRD-PARTY NOTICES
+----------------------------------------------------------------------
+
+AeroQR is grateful for and builds upon the following third-party software.
+Their license texts are publicly available at the links below.
+
+--------------------------------------------------------------------------
+1. OpenCV  (https://opencv.org)  — Apache License, Version 2.0
+--------------------------------------------------------------------------
+OpenCV is used for the QR code detector, image processing operations
+(CLAHE, sharpening, thresholding) and video capture.
+
+Copyright (C) 2026 OpenCV team
+https://opencv.org/license/
+
+Apache License Version 2.0:
+http://www.apache.org/licenses/LICENSE-2.0
+
+--------------------------------------------------------------------------
+2. NumPy  (https://numpy.org)  — BSD 3-Clause License
+--------------------------------------------------------------------------
+NumPy provides the numerical computing foundation for the detection
+and tracking pipeline.
+
+Copyright (c) 2005–2026, NumPy Developers
+https://numpy.org/license.html
+
+BSD 3-Clause License:
+https://opensource.org/licenses/BSD-3-Clause
+
+--------------------------------------------------------------------------
+3. Python Software Foundation  (https://www.python.org)
+--------------------------------------------------------------------------
+AeroQR is written in Python.
+
+Copyright (c) 2001–2026 Python Software Foundation, PSF license agreement:
+https://docs.python.org/3/license.html

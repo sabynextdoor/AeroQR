@@ -1,302 +1,401 @@
+<div align="center">
+
 # AeroQR
 
-[![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
-[![OpenCV Version](https://img.shields.io/badge/opencv-4.5%2B-green.svg)](https://opencv.org/)
-[![License](https://img.shields.io/badge/license-MIT-red.svg)](LICENSE)
+### Real-time QR detection, seed matching & drone-orientation tracking
 
-A real-time QR code detection system with seed image matching and orientation feedback for drone tracking applications, developed for ISRO IROUC 2026.
-<img width="1597" height="932" alt="Image" src="https://github.com/user-attachments/assets/55ee01eb-925f-4eb8-a36d-57093b743b93" />
+*Built for the **ISRO Innovation and Research Outreach Cell (IROUC) 2026** challenge*
 
-https://github.com/user-attachments/assets/9028ce35-8087-4bdd-af5b-ecbceb585220
+[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.5%2B-5C3EE8?logo=opencv&logoColor=white)](https://opencv.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-1.21%2B-013243?logo=numpy&logoColor=white)](https://numpy.org/)
 
-TO INSTALL THIS DOWNLOAD AND USE THE Drone_QR_angular_BY_SABY.py  FILE AND LAUNCH IN VSCODE
+[![Build](https://img.shields.io/github/actions/workflow/status/sabynextdoor/AeroQR/ci.yml?branch=main&label=CI&logo=github)](https://github.com/sabynextdoor/AeroQR/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/sabynextdoor/AeroQR?sort=semver&logo=github)](https://github.com/sabynextdoor/AeroQR/releases)
+[![PyPI](https://img.shields.io/pypi/v/aeroqr?logo=pypi&logoColor=white)](https://pypi.org/project/aeroqr/)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)]()
 
-## 🚀 Features
+[![Stars](https://img.shields.io/github/stars/sabynextdoor/AeroQR?logo=github)](https://github.com/sabynextdoor/AeroQR/stargazers)
+[![Forks](https://img.shields.io/github/forks/sabynextdoor/AeroQR?logo=github)](https://github.com/sabynextdoor/AeroQR/forks)
+[![Contributors](https://img.shields.io/github/contributors/sabynextdoor/AeroQR?logo=github)](https://github.com/sabynextdoor/AeroQR/graphs/contributors)
+[![Issues](https://img.shields.io/github/issues/sabynextdoor/AeroQR?logo=github&color=red)](https://github.com/sabynextdoor/AeroQR/issues)
+[![PRs](https://img.shields.io/github/issues-pr/sabynextdoor/AeroQR?logo=github&color=brightgreen)](https://github.com/sabynextdoor/AeroQR/pulls)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Code style](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-- **Real-time QR Detection**: Aggressive tracking with 60+ FPS performance
-- **Seed Image Matching**: Load and match QR codes against a reference image
-- **Orientation Feedback**: Real-time guidance for optimal QR code alignment
-- **Multiple Detection Strategies**: 6 different processing techniques for robust detection
-- **Kalman Filter Tracking**: Smooth tracking even when QR is temporarily lost
-- **Low Latency**: Optimized threading for minimal delay
-- **Interactive Controls**: Easy keyboard shortcuts for loading seeds and resetting
+---
 
-<img width="540" height="481" alt="Image" src="https://github.com/user-attachments/assets/8bd79c52-b137-47ff-a3d0-cb9b66f1c0f8" />
+**A high-performance computer-vision system that finds a target QR code in a
+live camera feed, verifies it against a reference "seed" image, and guides a
+drone into perfect alignment — all at 60+ FPS.**
 
-# 🚁 ISRO IROUC 2026 — QR Drone Detector
+</div>
 
-[![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
-[![OpenCV Version](https://img.shields.io/badge/opencv-4.5%2B-green.svg)](https://opencv.org/)
-[![License](https://img.shields.io/badge/license-MIT-red.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/sabynextdoor/QR-Tracker-for-drone-isro-by-)
+---
 
-> **Real-time QR Code Detection System with Drone Integration for ISRO IROUC 2026 by saby**
+## Table of Contents
 
-## 📋 Table of Contents
-- [Overview](#-overview)
+- [Why AeroQR?](#-why-aeroqr)
 - [Features](#-features)
 - [Demo](#-demo)
-- [System Architecture](#-system-architecture)
+- [How it works](#-how-it-works)
+- [Detection pipeline](#-detection-pipeline)
+- [Visual feedback](#-visual-feedback)
+- [Requirements](#-requirements)
 - [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Detailed Usage](#-detailed-usage)
-- [Drone Integration](#-drone-integration)
-- [Keyboard Controls](#-keyboard-controls)
-- [Technical Details](#-technical-details)
-- [Performance Optimization](#-performance-optimization)
+- [Quick start](#-quick-start)
+- [Usage](#-usage)
+  - [CLI reference](#cli-reference)
+  - [Interactive controls](#keyboard-controls)
+- [Drone protocol](#-drone-protocol)
+- [Performance tuning](#-performance-tuning)
+- [Project structure](#-project-structure)
+- [Testing & development](#-testing--development)
+- [Documentation](#-documentation)
+- [Roadmap](#-roadmap)
 - [Troubleshooting](#-troubleshooting)
-- [Future Enhancements](#-future-enhancements)
+- [FAQ](#-faq)
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Acknowledgments](#-acknowledgments)
 
-## 🎯 Overview
+---
 
-The **ISRO IROUC 2026 QR Drone Detector** is a high-performance, real-time computer vision system designed for drone-based QR code detection and tracking. Developed for the Indian Space Research Organisation (ISRO) Innovation and Research Outreach Cell (IROUC) 2026 challenge, this system provides:
+## 🎯 Why AeroQR?
 
-- **Ultra-fast QR detection** at 60+ FPS
-- **Automatic orientation correction** with visual feedback
-- **Seamless drone integration** with rotation commands
-- **Long-range detection** using multi-scale processing
-- **Auto-calibration** for different viewing angles
+QR codes are the visual anchors of autonomous drone applications — landing
+markers, package drop zones, warehouse labels, survey fiducials. The hard part
+isn't just *seeing* the code; it's recognising **the right one** and aligning
+to it from a moving, vibrating, tilted platform.
 
-Whether you're tracking QR codes on moving drones, guiding autonomous landing sequences, or building a QR-based navigation system, this detector provides the reliability and performance you need.
+AeroQR solves all three problems in a single threaded pipeline:
+
+| Problem | AeroQR solution |
+| --- | --- |
+| **Seeing it** | Multi-scale detection over 4 pre-processing strategies in a dedicated worker thread. |
+| **Recognising it** | Exact + similarity seed matching against a loaded reference image. |
+| **Aligning to it** | Auto-calibrated orientation analysis and prioritised UDP drone commands. |
 
 ## ✨ Features
 
-### Core Capabilities
-| Feature | Description |
-|---------|-------------|
-| 🚀 **Real-time Detection** | 60+ FPS processing with threaded camera capture |
-| 🎯 **Multi-Scale Detection** | 6 different scales for far/small QR codes |
-| 🔄 **Auto-Calibration** | Learns reference orientation from 5 samples |
-| 📐 **Orientation Analysis** | Calculates angle difference with 10° tolerance |
-| 🎨 **Visual Overlay** | Colored bounding boxes with rotation arrows |
-| 🔊 **Terminal Feedback** | Clear rotation instructions with angle data |
-| 🚁 **Drone Control** | Sends ROTATE_LEFT/RIGHT commands automatically |
-| 💻 **Webcam Support** | Works with laptop cameras and external USB webcams |
-
-### Detection Strategies
-The system uses 6 different image processing techniques to ensure maximum detection rate:
-
-1. **Plain Grayscale** - Fastest detection for clear QR codes
-2. **CLAHE Enhancement** - Improved contrast for poor lighting
-3. **Sharpening Filter** - Enhances edges for blurry QR codes
-4. **Otsu Thresholding** - Binary segmentation for high contrast
-5. **Upscaling (1.8x)** - Better detection for small QR codes
-6. **Downscaling (0.6x)** - Faster processing for large QR codes
-
-### Visual Feedback System
-- **Green Box** - QR matched with correct orientation ✓
-- **Orange Box** - QR matched but needs rotation ⚠️
-- **Red Box** - QR detected but wrong seed ❌
-- **Grey Box** - Tracking predicted position (lost temporarily)
-- **Rotation Arrow** - Animated arrow showing which direction to rotate
+- 🚀 **60+ FPS real-time detection** — capture, detection and rendering run on separate threads.
+- 🎯 **Multi-scale scanning** — 6 scales × 4 strategies for near, far and fuzzy codes.
+- 🔄 **Auto-calibration** — locks the reference orientation from 5 median-stabilised samples.
+- 📐 **Orientation feedback** — computes angle error within a 10° tolerance.
+- 🧠 **Kalman-style tracking** — smooths corners; keeps position during brief losses.
+- 🎨 **Rich HUD overlay** — status bar, corner markers, crosshair, rotation arrow.
+- 🚁 **Drone control** — UDP command channel with cooldown throttling and navigation priorities.
+- 🖥️ **Camera auto-discovery** — DirectShow + fallback, external webcam by default.
+- 🔌 **Installs anywhere** — `pip install`, console script, or `python -m aeroqr`.
 
 ## 🎬 Demo
 
-https://github.com/user-attachments/assets/9028ce35-8087-4bdd-af5b-ecbceb585220
+> Demo media lives in the [releases](https://github.com/sabynextdoor/AeroQR/releases) and
+> the [Downloads](#) section. Run `python -m aeroqr` and hold a printed QR code
+> up to your camera to see it live.
+
+![Ui screenshot](https://github.com/user-attachments/assets/8bd79c52-b137-47ff-a3d0-cb9b66f1c0f8)
+
+## 🧠 How it works
+
+```
+ ┌─────────────────────────────────────────┐
+ │  WebcamStream  (capture thread)         │
+ │  ─────────────────────────────────────  │
+ │  1280×720 @ 30 FPS                      │
+ └──────────────┬──────────────────────────┘
+                │ frames
+                ▼
+ ┌─────────────────────────────────────────┐
+ │  QRWorker  (detector thread)            │
+ │  ─────────────────────────────────────  │
+ │  6 scales × {gray · CLAHE · sharpen}    │
+ │  + Otsu fallback                        │
+ └──────────────┬──────────────────────────┘
+                │ data + 4 corners
+                ▼
+ ┌─────────────────────────────────────────┐
+ │  SeedMatcher                            │
+ │  ─────────────────────────────────────  │
+ │  payload match → auto-calibrate → angle │
+ └──────────────┬──────────────────────────┘
+                │ match + orientation
+                ▼
+ ┌─────────────────────────────────────────┐
+ │  SimpleTracker → Overlay (main thread)  │
+ │                   │                     │
+ │                   ▼                     │
+ │  DroneController (UDP, throttled)       │
+ └─────────────────────────────────────────┘
+```
+
+The **capture**, **detection** and **main loop** are fully decoupled, so the
+serialised detector never blocks the camera reader or the renderer.
+
+## 🔬 Detection pipeline
+
+Each frame is scanned with up to 18 scale × strategy combinations:
+
+| Strategy | When it helps |
+| --- | --- |
+| Plain grayscale | Fast baseline for clean codes |
+| CLAHE enhancement | Poor or uneven lighting |
+| Sharpening filter | Slightly blurred / motion-affected codes |
+| Otsu thresholding | High-contrast fallback for weak detections |
+| Upscaling 2.0× → 1.2× | Small / far-away QR codes |
+| Downscaling 0.8× → 0.6× | Large codes that dominate the frame |
+
+## 🎨 Visual feedback
+
+| Colour | Meaning |
+| --- | --- |
+| 🟩 Green box | Matched seed, correct orientation |
+| 🟧 Orange box | Matched seed, rotate to align |
+| 🟥 Red box | QR present but wrong seed |
+| ⬜ Grey box | Predicted position (temporarily lost) |
+| ➡️ Arrow | Animated direction to rotate |
+
+The status bar shows `✅ QR MATCHED`, `⚠️ ADJUSTING ROTATION`, `QR LOCKED`,
+`🔍 SEARCHING FOR QR...` or `SCANNING...`, and the terminal prints live angle
+instructions.
+
 ## 📋 Requirements
 
-- Python 3.7+
-- OpenCV 4.5+
-- NumPy
-- Tkinter (usually comes with Python)
-- PyYAML (optional, for configuration)
+- **Python 3.8+**
+- **OpenCV 4.5+** (with contrib-free `QRCodeDetector`)
+- **NumPy 1.21+**
+- Tkinter (bundled with most Python installers — used only for the file dialog)
+
+Support for older Windows setups through the DirectShow backend is included.
 
 ## 🔧 Installation
-Step 2: Create Virtual Environment (Recommended)
-Windows:
 
-bash
-python -m venv venv
-venv\Scripts\activate
-Linux/macOS:
-
-bash
-python3 -m venv venv
-source venv/bin/activate
-Step 3: Install Dependencies
-bash
-pip install opencv-python numpy
-Step 4: Verify Installation
-bash
-python qr_drone_detector.py
-You should see the camera selection prompt and the OpenCV window.
-
-🚀 Quick Start
-1. Run the Detector
-bash
-python qr_drone_detector.py
-2. Select Camera
-text
-📷 Available camera indices:
-   Index 0 - Built-in laptop camera
-   Index 1 - External USB webcam
-
-Select camera index (default 1 for external webcam): 
-Press Enter for external webcam or type 0 for laptop camera.
-
-3. Load Seed QR Image
-A file dialog will open. Select an image containing the QR code you want to track.
-
-4. Connect to Drone (Optional)
-text
-Connect to drone? (y/n): n
-Select n if you don't have a drone (the system still works for visual feedback).
-
-5. Start Scanning
-Hold your QR code in front of the camera. The system will:
-
-Detect the QR code
-
-Compare with seed image
-
-Show rotation instructions if needed
-
-Send rotation commands to drone (if connected)
-
-📖 Detailed Usage
-Preparing Seed Images
-For best results, prepare your seed image with these guidelines:
-
-QR Code Quality
-
-Use high-contrast QR codes (black on white)
-
-Minimum size: 200x200 pixels
-
-Ensure QR is not distorted
-
-Reference Orientation
-
-Hold QR upright when capturing seed image
-
-System will calibrate to this orientation
-
-QR can be rotated up to 45° in either direction
-
-File Formats Supported
-
-JPEG (.jpg, .jpeg)
-
-PNG (.png)
-
-BMP (.bmp)
-
-TIFF (.tiff)
-
-Understanding the Interface
-Top Bar Indicators
-Indicator	Meaning
-✅ QR MATCHED	QR matches seed with correct orientation
-⚠️ ADJUSTING ROTATION	QR matches but needs rotation
-QR LOCKED	QR detected but doesn't match seed
-🔍 SEARCHING FOR QR	Drone searching for QR (if connected)
-SCANNING...	No QR detected
-QR Overlay Elements
-Colored Border - Indicates match status
-
-Center Cross - QR center point
-
-Corner Markers - QR corner positions
-
-Rotation Arrow - Shows which direction to rotate
-
-Label Text - QR data or rotation instruction
-
-Angle Error - Shows current angle difference
-
-🔮 Future Enhancements
-Planned features for future releases:
-
-Audio Feedback - Voice instructions for rotation
-
-Distance Estimation - Calculate QR distance from camera
-
-Multiple QR Tracking - Track several QR codes simultaneously
-
-Recording Mode - Save detection sessions for analysis
-
-GUI Dashboard - Modern PyQt interface with graphs
-
-Mobile App - Control drone from smartphone
-
-Cloud Sync - Upload detection data to cloud
-
-API Mode - REST API for integration with other systems
-
-🤝 Contributing
-Contributions are welcome! Please follow these steps:
-
-Fork the repository
-
-Create a feature branch
-
-bash
-git checkout -b feature/amazing-feature
-Commit your changes
-
-bash
-git commit -m 'Add amazing feature'
-Push to branch
-
-bash
-git push origin feature/amazing-feature
-Open a Pull Request
-
-Development Guidelines
-Follow PEP 8 style guide
-
-Add docstrings for new functions
-
-Test with both laptop and external cameras
-
-Update README for new features
-
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-🙏 Acknowledgments
-ISRO IROUC 2026 - For the challenge and inspiration
-
-OpenCV Community - For the excellent computer vision library
-
-Contributors - Everyone who helped test and improve the system
-
-📞 Contact & Support
-
-Email: sabynextdoor@gmail.com
-
-Documentation: Wiki
-
-⭐ Star History
-If you find this project useful, please give it a star on GitHub! ⭐
-
-Made with ❤️ for ISRO IROUC 2026 by saby
-
-Last Updated: March 2026
-
-text
-TO INSTALL THIS DOWNLOAD AND USE THE PYTHON FILE AND LAUNCH IN VSCODE
-
-This README is comprehensive and includes:
-- Detailed feature list
-- System architecture diagram
-- Installation instructions
-- Usage guide with examples
-- Drone integration details
-- Performance metrics
-- Troubleshooting guide
-- Future enhancements
-- Contribution guidelines
-
-You can save this as `README.md` in your GitHub repository root directory.
-
-### Quick Install
+### Option 1 — pip (recommended)
 
 ```bash
-git clone https://github.com/yourusername/isro-qr-drone-detector.git
-cd isro-qr-drone-detector
-pip install -r requirements.txt
+pip install aeroqr
+```
 
+### Option 2 — from source
+
+```bash
+git clone https://github.com/sabynextdoor/AeroQR.git
+cd AeroQR
+
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# Linux / macOS:
+source .venv/bin/activate
+
+pip install -e ".[dev]"
+```
+
+### Verify
+
+```bash
+python -m aeroqr --version
+# or
+aeroqr --version
+```
+
+## 🚀 Quick start
+
+```bash
+# Run the app (you'll be guided through camera + seed selection):
+python -m aeroqr
+
+# Fully automated (camera 0, headless-friendly args):
+python -m aeroqr --camera 0 --seed path/to/seed.png
+```
+
+1. **Select a camera** — press <kbd>Enter</kbd> for the external webcam, or type `0` for the laptop camera.
+2. **Load the seed QR** — pick any image containing the QR you want to track.
+3. **Connect a drone (optional)** — answer `n` for visual feedback only.
+4. **Scan** — hold the QR code up to the camera. Watch it lock, calibrate and align.
+
+## 🖥️ Usage
+
+### CLI reference
+
+```text
+usage: aeroqr [-h] [--version] [-c CAMERA] [-s SEED] [-d] [--drone-ip DRONE_IP]
+
+AeroQR — real-time QR detection, seed matching and orientation tracking
+for drone applications (ISRO IROUC 2026).
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  -c, --camera CAMERA   camera index to open (default: interactive prompt)
+  -s, --seed SEED       path to the seed QR image (default: file dialog)
+  -d, --drone           enable drone control (default: interactive prompt)
+  --drone-ip DRONE_IP   drone command IP address (default: 192.168.1.100)
+```
+
+### Keyboard controls
+
+| Key | Action |
+| --- | --- |
+| <kbd>Q</kbd> | Quit (and command the drone to `LAND` if connected) |
+| <kbd>L</kbd> | Load a new seed QR image |
+| <kbd>R</kbd> | Reset the seed matcher and calibration |
+| <kbd>D</kbd> | Toggle drone control on/off |
+
+### Preparing seed images
+
+- Use **high-contrast** QR codes (black on white).
+- Provide at least **200 × 200 px**, undistorted.
+- Capture the seed **upright** — the system calibrates to this orientation.
+- Works with `.jpg`, `.jpeg`, `.png`, `.bmp`, `.tiff`.
+
+## 🚁 Drone protocol
+
+Commands are sent over **UDP** (default `192.168.1.100:8888`) with a 300 ms
+cooldown between transmissions. Navigation is prioritised:
+
+1. **Fix rotation** — `ROTATE_LEFT <n>°` / `ROTATE_RIGHT <n>°`
+2. **Centre horizontally** — `MOVE_LEFT` / `MOVE_RIGHT <n>`
+3. **Centre vertically** — `MOVE_UP` / `MOVE_DOWN <n>`
+4. **Hover** — `HOVER`
+
+When the QR disappears for more than 10 frames, the drone sweeps with
+`ROTATE_RIGHT 20` until it reacquires the target.
+
+> ⚠️ **Security note:** the drone channel is unauthenticated. Use it only on
+> trusted, isolated networks. See [SECURITY.md](SECURITY.md).
+
+## 🚄 Performance tuning
+
+All tunables live in [`src/aeroqr/config.py`](src/aeroqr/config.py):
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `DETECTION_SCALES` | `(2.0 … 0.6)` | Scale window per frame |
+| `MATCHING_THRESHOLD` | `85` | % similarity for a positive match |
+| `CALIBRATION_SAMPLES` | `5` | Detections before locking angle |
+| `ANGLE_TOLERANCE` | `10` | Degrees of accepted error |
+| `SMOOTH_FACTOR` | `0.7` | Corner smoothing (higher = steadier) |
+| `LOSE_AFTER` | `30` | Frames before QR is declared lost |
+| `COMMAND_COOLDOWN` | `0.3` | Seconds between drone commands |
+
+Low latency tips: close background apps, prefer a USB3 webcam, and keep
+`CAPTURE_BUFFER_SIZE = 1` to avoid frame lag.
+
+## 📂 Project structure
+
+```
+AeroQR/
+├── .github/                 # CI/CD + issue & PR templates
+├── docs/                    # ARCHITECTURE.md · API.md
+├── src/aeroqr/
+│   ├── __main__.py          # python -m aeroqr
+│   ├── app.py               # orchestration / main loop
+│   ├── cli.py               # command-line interface
+│   ├── config.py            # tunable parameters
+│   ├── controller.py        # DroneController (UDP)
+│   ├── detector.py          # QRWorker (background detection)
+│   ├── matcher.py           # SeedMatcher (match + calibrate)
+│   ├── stream.py            # WebcamStream (threaded capture)
+│   ├── tracker.py           # SimpleTracker (smoothing)
+│   └── utils.py             # geometry, validation, HUD, dialogs
+├── tests/                   # pytest suite
+├── pyproject.toml           # packaging, dependencies, tooling
+├── requirements.txt
+├── requirements-dev.txt
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
+```
+
+## 🔬 Testing & development
+
+```bash
+pip install -e ".[dev]"
+pytest                      # 22 tests
+ruff check .                # lint
+ruff format --check .       # format
+```
+
+CI runs the suite on **Windows + Ubuntu** across **Python 3.9 → 3.12**, and
+automatically builds the sdist/wheel. A release workflow drafts GitHub
+Releases from `v*` tags; a publishing workflow is wired for PyPI
+(trusted publishing).
+
+## 📚 Documentation
+
+- [Architecture & data flow](docs/ARCHITECTURE.md)
+- [API reference](docs/API.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Code of conduct](CODE_OF_CONDUCT.md)
+- [Security policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
+
+## 🗺️ Roadmap
+
+- [ ] Audio feedback for rotation instructions
+- [ ] Distance estimation from QR size
+- [ ] Multiple simultaneous QR tracking
+- [ ] Session recording mode
+- [ ] PyQt dashboard with live graphs
+- [ ] REST API mode
+
+## 🛠️ Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| No camera found | Re-run with `--camera 0`; check the camera is not locked by another app |
+| `ModuleNotFoundError` | `pip install -e ".[dev]"` inside your virtualenv |
+| Slow FPS | Reduce `DETECTION_SCALES`, close background apps, use USB3 |
+| Detects wrong QR | Load a clearer seed; check `MATCHING_THRESHOLD` |
+| No QR ever detected | Improve lighting; keep code < 45° tilt; use a 200×200 px+ print |
+
+## ❓ FAQ
+
+**Do I need a drone?**
+No. Without drone control AeroQR is a powerful visual feedback tool — run it,
+and the terminal + overlay guide you.
+
+**Why did the standalone script disappear?**
+It was promoted into a proper installable package. The logic is unchanged, now
+organised into focused modules under `src/aeroqr/`.
+
+**Which camera index should I use?**
+`0` = built-in laptop camera, `1` = external USB webcam (default).
+
+## 🤝 Contributing
+
+Contributions of all kinds are welcome — features, bugs, docs, tests. Please
+read [CONTRIBUTING.md](CONTRIBUTING.md) first, then:
+
+1. Fork the repo
+2. Create a feature branch
+3. Make your change + tests
+4. Keep `ruff` and `pytest` green
+5. Open a pull request
+
+## 📄 License
+
+Released under the [MIT License](LICENSE). Copyright © 2026 sabynextdoor.
+Third-party licenses are documented in the [NOTICE](NOTICE) file.
+
+## 🙏 Acknowledgments
+
+- **ISRO IROUC 2026** — for the challenge and the inspiration.
+- **OpenCV community** — the computer-vision backbone.
+- **NumPy & the Python scientific ecosystem** — for the compute layer.
+- Every contributor and tester who helped harden the pipeline.
+
+---
+
+<div align="center">
+
+**Made with ❤️ for ISRO IROUC 2026 by [sabynextdoor](https://github.com/sabynextdoor)**
+
+⭐ Star this repo if AeroQR helps your project — it fuels the roadmap!
+
+Questions? [sabynextdoor@gmail.com](mailto:sabynextdoor@gmail.com)
+
+</div>
